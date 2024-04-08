@@ -30,7 +30,7 @@ def crawl(rrname, rrtype, domain, ns=default_resolvers):
     except Exception as err:
         print(repr(err), rrname, rrtype)
     else:
-        answer = " ".join([str(a) for a in answers])
+        answer = "".join([str(a) for a in answers])
         for pair in tokenize(answer):
             rname, rtype = pair
             if rtype is None:
