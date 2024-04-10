@@ -52,11 +52,24 @@ include = partial(process_alias, keyword="txt")
 exists = partial(process_alias, keyword="exists")
 
 
-def tokenize(answer):
+def tokenize(answer, rrtype):
+    # TXT records potentially contain multiple strings that
+    # must be concatenated first, they also contain other
+    # quotes which will screw up the tokens, see:
+    # https://datatracker.ietf.org/doc/html/rfc7208#section-3.3
+    if rrtype == "txt":
+        answer = answer.replace("\" \"", "")
+        answer = answer.strip("\"")
     tokens = answer.split()
+    # TXT records have to begin with "v=spf1" or otherwise
+    # they should be discarded, see:
+    # https://datatracker.ietf.org/doc/html/rfc7208#section-4.5
+    if rrtype == "txt":
+        if (len(tokens) > 0) and (tokens[0] == "v=spf1"):
+            tokens = tokens[1:]
+        else:
+            tokens = []
     for token in tokens:
-        # TXT records often contain quotes and will screw with the token.
-        token = token.strip("\"' ")
         for pattern, fn in mechanism_mapping.items():
             if re.match(pattern, token):
                 yield fn(token)
