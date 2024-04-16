@@ -30,17 +30,17 @@ def crawl(rrname, rrtype, domain, ns=default_resolvers):
     except Exception as err:
         print(repr(err), rrname, rrtype)
     else:
-        answer = " ".join([str(a) for a in answers])
-        for pair in tokenize(answer):
-            rname, rtype = pair
-            if rtype is None:
-                continue
-            if rtype == "txt":
-                for ip in crawl(rname, "txt", domain, ns):
-                    yield ip
-                continue
-            try:
-                for ip in handler_mapping[rtype](rname, domain, ns):
-                    yield ip
-            except (NXDOMAIN, NoAnswer) as e:
-                print(e)
+        for answer in answers:
+            for pair in tokenize(str(answer), rrtype):
+                rname, rtype = pair
+                if rtype is None:
+                    continue
+                if rtype == "txt":
+                    for ip in crawl(rname, rtype, domain, ns):
+                        yield ip
+                    continue
+                try:
+                    for ip in handler_mapping[rtype](rname, domain, ns):
+                        yield ip
+                except (NXDOMAIN, NoAnswer) as e:
+                    print(e)
