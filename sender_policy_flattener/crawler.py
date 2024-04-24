@@ -26,21 +26,15 @@ def spf2ips(records, domain, resolvers=default_resolvers):
 
 def crawl(rrname, rrtype, domain, ns=default_resolvers):
     try:
-        answers = ns.query(from_text(rrname), rrtype)
+        answers = ns.resolve(from_text(rrname), rrtype)
     except Exception as err:
         print(repr(err), rrname, rrtype)
     else:
         for answer in answers:
             for pair in tokenize(str(answer), rrtype):
                 rname, rtype = pair
-                if rtype is None:
-                    continue
-                if rtype == "txt":
-                    for ip in crawl(rname, rtype, domain, ns):
-                        yield ip
-                    continue
-                try:
-                    for ip in handler_mapping[rtype](rname, domain, ns):
-                        yield ip
-                except (NXDOMAIN, NoAnswer) as e:
-                    print(e)
+                if rtype is not None:
+                    try:
+                        yield from handler_mapping[rtype](rname, domain, ns):
+                    except (NXDOMAIN, NoAnswer) as e:
+                        print(e)
