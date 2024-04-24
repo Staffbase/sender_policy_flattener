@@ -35,6 +35,6 @@ def crawl(rrname, rrtype, domain, ns=default_resolvers):
                 rname, rtype = pair
                 if rtype is not None:
                     try:
-                        yield from handler_mapping[rtype](rname, domain, ns):
+                        yield from handler_mapping[rtype](rname, domain, ns)
                     except (NXDOMAIN, NoAnswer) as e:
                         print(e)
