@@ -1,0 +1,28 @@
+---
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      time: "09:00"
+      timezone: "Europe/Berlin"
+    cooldown:
+      default-days: 7
+    groups:
+      pipeline-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      time: "09:00"
+      timezone: "Europe/Berlin"
+    cooldown:
+      default-days: 7
+    groups:
+      python-dependencies:
+        patterns:
+          - "*"
