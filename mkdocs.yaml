@@ -1,0 +1,8 @@
+## ref: https://backstage.io/docs/features/techdocs/creating-and-publishing#manually-add-documentation-setup-to-already-existing-repository
+site_name: 'sender_policy_flattener'
+
+nav:
+  - index.md
+
+plugins:
+  - techdocs-core
