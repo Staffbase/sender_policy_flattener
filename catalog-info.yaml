@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sender_policy_flattener
+  description: Compact large SPF chains into flat blocks of IP addresses
+  annotations:
+    ## Path to mkdocs.yml that is relative to the source of the catalog-info.yaml
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: Staffbase/sender_policy_flattener
+  tags:
+    - infrastructure
+    - mail
+    - python
+    - security
+    - spf
+spec:
+  type: library
+  lifecycle: production
